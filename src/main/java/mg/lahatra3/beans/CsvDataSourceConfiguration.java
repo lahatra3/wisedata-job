@@ -5,6 +5,7 @@ import java.util.Objects;
 public class CsvDataSourceConfiguration {
 
     private final String absolutePath;
+    // private final int fetchSize;
 
     /**
      * Constructs a new {@code CsvDataSourceConfiguration} instance.
@@ -24,5 +25,5 @@ public class CsvDataSourceConfiguration {
     // Getter methods
     public String getAbsolutePath() {
         return absolutePath;
-    } 
+    }
 }

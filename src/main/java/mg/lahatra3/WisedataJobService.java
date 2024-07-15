@@ -18,14 +18,15 @@ public class WisedataJobService {
     public void process() {
         
         CsvDataSourceConfiguration csvDataSourceConfiguration = new CsvDataSourceConfiguration(
-            "<absolute_path_file>"
+            "/home/user/wisedata-job/src/main/resources/data.csv"
         );
 
         JdbcDataSinkConfiguration jdbcDataSinkConfiguration = new JdbcDataSinkConfiguration(
-            "jdbc:postgresql://<host>:<port>/<database>", 
-            "", 
-            "",
+            "jdbc:postgresql://iteam-s.mg:5432/wisedata", 
+            "postgres", 
+            "w1s3d_ta",
             "wisedata_db_test",
+            131,
             131
         );
 
@@ -51,9 +52,11 @@ public class WisedataJobService {
         SparkSession sparkSession = SparkSession.builder()
             .config(sparkConf).getOrCreate();
 
+        System.out.println("Start reading data ...");
         CsvDataReader csvDataReader = new CsvDataReader(sparkSession, csvDataSourceConfiguration);
         Dataset<Row> dataset = csvDataReader.get();
 
+        System.out.println("Start writing data ...");
         JdbcDataWriter jdbcDataWriter = new JdbcDataWriter(jdbcDataSinkConfiguration);
         jdbcDataWriter.accept(dataset);
     }
