@@ -18,13 +18,13 @@ public class WisedataJobService {
     public void process() {
         
         CsvDataSourceConfiguration csvDataSourceConfiguration = new CsvDataSourceConfiguration(
-            "/home/user/wisedata-job/src/main/resources/data.csv"
+            "/home/jhs/Projets/WISEDATA/wisedata-job/local/data.csv"
         );
 
         JdbcDataSinkConfiguration jdbcDataSinkConfiguration = new JdbcDataSinkConfiguration(
-            "jdbc:postgresql://iteam-s.mg:5432/wisedata", 
-            "postgres", 
-            "w1s3d_ta",
+            "jdbc:postgresql://localhost:5431/wisedata", 
+            "", 
+            "",
             "wisedata_db_test",
             131,
             131
