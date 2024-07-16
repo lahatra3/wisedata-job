@@ -5,6 +5,7 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import mg.lahatra3.beans.CsvDataSourceConfiguration;
 import mg.lahatra3.beans.JdbcDataSinkConfiguration;
 import mg.lahatra3.beans.SparkConfiguration;
@@ -16,27 +17,45 @@ public class WisedataJobService {
     public WisedataJobService() {}
 
     public void process() {
+
+        Dotenv dotenv = Dotenv.load();
         
-        CsvDataSourceConfiguration csvDataSourceConfiguration = new CsvDataSourceConfiguration(
-            "/home/jhs/Projets/WISEDATA/wisedata-job/local/data.csv"
-        );
+
+        String absolutePath = dotenv.get("CSV_DATASOURCE");
+
+        CsvDataSourceConfiguration csvDataSourceConfiguration = new CsvDataSourceConfiguration(absolutePath);
+
+        String jdbcUrl = dotenv.get("DB_JDBC_URL_DATASINK");
+        String user = dotenv.get("DB_USER_DATASINK");
+        String password = dotenv.get("DB_PASSWORD_DATASINK");
+        String dbtable = dotenv.get("DB_TABLE_DATASINK");
+        String numPartitions = dotenv.get("NUM_PARTITION_DATASINK");
+        String batchSize = dotenv.get("BATCH_SIZE_DATASINK");
 
         JdbcDataSinkConfiguration jdbcDataSinkConfiguration = new JdbcDataSinkConfiguration(
-            "jdbc:postgresql://localhost:5431/wisedata", 
-            "", 
-            "",
-            "wisedata_db_test",
-            131,
-            131
+            jdbcUrl, 
+            user, 
+            password,
+            dbtable,
+            numPartitions,
+            batchSize
         );
 
+
+        String appName = dotenv.get("SPARK_APPNAME");
+        String masterUrl = dotenv.get("SPARK_MASTER_URL");
+        String exector = dotenv.get("SPARK_EXECUTORS_NUMBER");
+        String core = dotenv.get("SPARK_CORE_EXECUTOR");
+        String memory = dotenv.get("SPARK_MEMORY_EXECUTOR");
+        String extraJavaOptions = dotenv.get("SPARK_EXTRA_JAVA_OPTIONS");
+
         SparkConfiguration sparkConfiguration = new SparkConfiguration(
-            "Wisedata",
-            "local[*]",
-            "3",
-            "4",
-            "3g",
-            "-XX:+IgnoreUnrecognizedVMOptions --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/sun.nio.cs=ALL-UNNAMED --add-opens=java.base/sun.security.action=ALL-UNNAMED --add-opens=java.base/sun.util.calendar=ALL-UNNAMED --add-opens=java.security.jgss/sun.security.krb5=ALL-UNNAMED"
+            appName,
+            masterUrl,
+            exector,
+            core,
+            memory,
+            extraJavaOptions
         );
 
         SparkConf sparkConf = new SparkConf()

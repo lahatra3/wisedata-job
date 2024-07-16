@@ -8,8 +8,8 @@ public class JdbcDataSinkConfiguration {
     private final String user;
     private final String password;
     private final String dbtable;
-    private final int numPartitions;
-    private final int batchSize;
+    private final String numPartitions;
+    private final String batchSize;
 
 
     /**
@@ -28,8 +28,8 @@ public class JdbcDataSinkConfiguration {
         String user, 
         String password,
         String dbtable,
-        int numPartitions,
-        int batchSize
+        String numPartitions,
+        String batchSize
     ) {
         Objects.requireNonNull(jdbcUrl, "jdbcUrl cannot be null ...");
         Objects.requireNonNull(user, "user cannot be null ...");
@@ -63,11 +63,11 @@ public class JdbcDataSinkConfiguration {
         return dbtable;
     }
 
-    public int getNumPartitions() {
+    public String getNumPartitions() {
         return numPartitions;
     }
 
-    public int getBatchSize() {
+    public String getBatchSize() {
         return batchSize;
     }
 }
